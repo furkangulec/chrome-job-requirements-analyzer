@@ -1,3 +1,66 @@
+async function analyzeCVWithJobDescription(cvText, jobDescription, apiKey) {
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "Sen bir İK uzmanısın. CV ile iş ilanı arasındaki uyumu analiz edeceksin."
+        },
+        {
+          role: "user",
+          content: `CV içeriği: ${cvText}\n\nİş ilanı: ${jobDescription}\n\nBu CV'nin iş ilanı ile uyumunu analiz et. Eksik yetkinlikleri ve güçlü yanları listele.`
+        }
+      ]
+    })
+  });
+
+  const data = await response.json();
+  return data.choices[0].message.content;
+}
+
+async function processQueue() {
+  const storage = await chrome.storage.local.get(['jobQueue', 'cvFile', 'openaiApiKey']);
+  const { jobQueue, cvFile, openaiApiKey } = storage;
+
+  if (!jobQueue || jobQueue.length === 0) return;
+  if (!cvFile) return;
+  if (!openaiApiKey) return;
+
+  const updatedQueue = [...jobQueue];
+  
+  for (let i = 0; i < updatedQueue.length; i++) {
+    const job = updatedQueue[i];
+    if (job.status === "İnceleniyor...") {
+      try {
+        const analysis = await analyzeCVWithJobDescription(
+          "CV içeriği buraya gelecek", // TODO: CV içeriğini okuma fonksiyonu eklenecek
+          job.text,
+          openaiApiKey
+        );
+
+        updatedQueue[i] = {
+          ...job,
+          status: "Tamamlandı",
+          analysis: analysis
+        };
+      } catch (error) {
+        updatedQueue[i] = {
+          ...job,
+          status: "Hata: " + error.message
+        };
+      }
+    }
+  }
+
+  await chrome.storage.local.set({ jobQueue: updatedQueue });
+}
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "compareCV",
@@ -10,6 +73,9 @@ chrome.runtime.onInstalled.addListener(() => {
       chrome.storage.local.set({ jobQueue: [] });
     }
   });
+
+  // Her 5 saniyede bir kuyruğu kontrol et
+  setInterval(processQueue, 5000);
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {

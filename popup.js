@@ -27,12 +27,24 @@ document.addEventListener('DOMContentLoaded', function() {
       queue.reverse().forEach(job => {
         const jobElement = document.createElement('div');
         jobElement.className = 'queue-item';
-        jobElement.innerHTML = `
+        let content = `
           <h4 class="site-name">${job.siteName}</h4>
           <p>${job.text.substring(0, 150)}${job.text.length > 150 ? '...' : ''}</p>
           <p class="status">${job.status}</p>
           <p class="timestamp">${job.timestamp}</p>
         `;
+
+        // Eğer analiz sonucu varsa göster
+        if (job.analysis) {
+          content += `
+            <div class="analysis">
+              <h4>Analiz Sonucu:</h4>
+              <p>${job.analysis}</p>
+            </div>
+          `;
+        }
+
+        jobElement.innerHTML = content;
         queueItems.appendChild(jobElement);
       });
     });
@@ -55,14 +67,19 @@ document.addEventListener('DOMContentLoaded', function() {
   fileInput.addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
-      const fileData = {
-        name: file.name,
-        lastModified: file.lastModified
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const fileData = {
+          name: file.name,
+          content: e.target.result,
+          lastModified: file.lastModified
+        };
+        
+        chrome.storage.local.set({ cvFile: fileData }, function() {
+          showFileInfo(fileData);
+        });
       };
-      
-      chrome.storage.local.set({ cvFile: fileData }, function() {
-        showFileInfo(fileData);
-      });
+      reader.readAsText(file);
     }
   });
 
