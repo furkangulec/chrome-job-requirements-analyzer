@@ -36,10 +36,18 @@ async function processQueue() {
   
   for (let i = 0; i < updatedQueue.length; i++) {
     const job = updatedQueue[i];
-    if (job.status === "İnceleniyor...") {
+    if (job.status === "Kuyruğa Eklendi") {
       try {
+        // Önce durumu güncelle
+        updatedQueue[i] = {
+          ...job,
+          status: "İnceleniyor..."
+        };
+        await chrome.storage.local.set({ jobQueue: updatedQueue });
+
+        // Sonra analizi yap
         const analysis = await analyzeCVWithJobDescription(
-          "CV içeriği buraya gelecek", // TODO: CV içeriğini okuma fonksiyonu eklenecek
+          cvFile.content || "CV içeriği okunamadı",
           job.text,
           openaiApiKey
         );
@@ -85,7 +93,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       text: info.selectionText,
       url: tab.url,
       siteName: new URL(tab.url).hostname,
-      status: "İnceleniyor...",
+      status: "Kuyruğa Eklendi",
       timestamp: new Date().toLocaleString()
     };
 
