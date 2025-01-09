@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 400px;
+      padding: 15px;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .file-info {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+      display: none;
+    }
+    .button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #45a049;
+    }
+    .queue-container {
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .queue-item {
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      border-left: 4px solid #4CAF50;
+    }
+    .queue-item h4 {
+      margin: 0 0 5px 0;
+    }
+    .queue-item p {
+      margin: 5px 0;
+      font-size: 0.9em;
+    }
+    .status {
+      color: #666;
+      font-style: italic;
+    }
+    .timestamp {
+      color: #999;
+      font-size: 0.8em;
+    }
+    .site-name {
+      color: #0066cc;
+    }
+    #cvFile {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>CV Karşılaştırma Aracı</h3>
+    <input type="file" id="cvFile" accept=".pdf,.doc,.docx">
+    <button class="button" id="selectFile">CV Dosyası Seç</button>
+    <div id="fileInfo" class="file-info">
+      <strong>Seçili Dosya:</strong>
+      <p id="fileName"></p>
+    </div>
+    
+    <div class="queue-container" id="queueContainer">
+      <h3>İnceleme Kuyruğu</h3>
+      <div id="queueItems"></div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html> 
