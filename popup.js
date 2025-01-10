@@ -151,22 +151,56 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Dosya seçildiğinde
-  fileInput.addEventListener('change', function(e) {
+  fileInput.addEventListener('change', async function(e) {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const fileData = {
-          name: file.name,
-          content: e.target.result,
-          lastModified: file.lastModified
-        };
-        
-        chrome.storage.local.set({ cvFile: fileData }, function() {
-          showFileInfo(fileData);
+    if (!file) return;
+
+    try {
+      let fileContent;
+      if (file.type === 'application/pdf') {
+        // API'ye PDF'i gönder
+        const formData = new FormData();
+        formData.append("Target", "txt");
+        formData.append("File", file);
+
+        const response = await fetch('https://api.pdfconverted.com/api/convert/file', {
+          method: 'POST',
+          body: formData
         });
+
+        if (!response.ok) {
+          throw await response.text();
+        }
+
+        const result = await response.json();
+        
+        // İndirme URL'ini al
+        const downloadUrl = 'https://api.pdfconverted.com/' + (result.downloadUrl.startsWith('/') ? result.downloadUrl.substr(1) : result.downloadUrl);
+        
+        // Text dosyasını indir
+        const textResponse = await fetch(downloadUrl);
+        if (!textResponse.ok) {
+          throw new Error('Text dosyası indirilemedi');
+        }
+        
+        fileContent = await textResponse.text();
+      } else {
+        // Text dosyasını normal oku
+        fileContent = await file.text();
+      }
+
+      const fileData = {
+        name: file.name,
+        content: fileContent,
+        lastModified: file.lastModified
       };
-      reader.readAsText(file);
+      
+      chrome.storage.local.set({ cvFile: fileData }, function() {
+        showFileInfo(fileData);
+      });
+    } catch (error) {
+      console.error('Dosya okuma hatası:', error);
+      alert('Dosya okunamadı: ' + error.message);
     }
   });
 
