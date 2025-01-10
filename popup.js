@@ -62,8 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Kaydetme seçenekleri
         content += `
           <div class="save-options" id="saveOptions-${job.id}">
-            <button class="button button-small" data-action="saveAs" data-format="xlsx" data-id="${job.id}">Excel (.xlsx)</button>
-            <button class="button button-small" data-action="saveAs" data-format="doc" data-id="${job.id}">Word (.doc)</button>
             <button class="button button-small" data-action="saveAs" data-format="txt" data-id="${job.id}">Metin (.txt)</button>
           </div>
         `;
@@ -122,35 +120,12 @@ document.addEventListener('DOMContentLoaded', function() {
       
       if (!job) return;
 
-      let content = '';
-      let mimeType = '';
-      let extension = '';
-
-      // Format içeriğini hazırla
-      switch (format) {
-        case 'xlsx':
-          content = `Site: ${job.siteName}\nURL: ${job.url}\n\nİş İlanı:\n${job.text}\n\nAnaliz:\n${job.analysis}`;
-          mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-          extension = 'xlsx';
-          break;
-        case 'doc':
-          content = `Site: ${job.siteName}\nURL: ${job.url}\n\nİş İlanı:\n${job.text}\n\nAnaliz:\n${job.analysis}`;
-          mimeType = 'application/msword';
-          extension = 'doc';
-          break;
-        case 'txt':
-          content = `Site: ${job.siteName}\nURL: ${job.url}\n\nİş İlanı:\n${job.text}\n\nAnaliz:\n${job.analysis}`;
-          mimeType = 'text/plain';
-          extension = 'txt';
-          break;
-      }
-
-      // Dosyayı indir
-      const blob = new Blob([content], { type: mimeType });
+      const content = `Site: ${job.siteName}\nURL: ${job.url}\n\nİş İlanı:\n${job.text}\n\nAnaliz:\n${job.analysis}`;
+      const blob = new Blob([content], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `analiz_${job.id}.${extension}`;
+      a.download = `analiz_${job.id}.txt`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

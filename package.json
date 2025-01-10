@@ -1,0 +1,8 @@
+{
+  "name": "cv-analyzer-extension",
+  "version": "1.0.0",
+  "description": "CV Analysis Chrome Extension",
+  "dependencies": {
+    "pdf-parse": "^1.1.1"
+  }
+} 
