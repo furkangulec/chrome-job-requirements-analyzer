@@ -28,7 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const jobElement = document.createElement('div');
         jobElement.className = 'queue-item';
         let content = `
-          <h4 class="site-name">${job.siteName}</h4>
+          <h4 class="site-name">
+            <a href="${job.url}" target="_blank" style="color: inherit; text-decoration: none; cursor: pointer;">
+              ${job.siteName}
+            </a>
+          </h4>
           <p>${job.text.substring(0, 150)}${job.text.length > 150 ? '...' : ''}</p>
           <p class="status">${job.status}</p>
           <p class="timestamp">${job.timestamp}</p>
