@@ -14,7 +14,7 @@ async function analyzeCVWithJobDescription(cvText, jobDescription, apiKey) {
         },
         {
           role: "user",
-          content: `CV içeriği: ${cvText}\n\nİş ilanı: ${jobDescription}\n\nBu CV'nin iş ilanı ile uyumunu analiz et. Eksik yetkinlikleri ve güçlü yanları listele.`
+          content: `CV içeriği: ${cvText}\n\nİş ilanı: ${jobDescription}\n\nBu CV'nin iş ilanı ile uyumunu analiz et. Eksik yetkinlikleri ve güçlü yanları listele. Daha sonra uyumluluk oranının % olarak ver.`
         }
       ]
     })
@@ -38,6 +38,15 @@ async function processQueue() {
     const job = updatedQueue[i];
     if (job.status === "Kuyruğa Eklendi") {
       try {
+        // CV içeriğini kontrol et
+        if (!cvFile.content || cvFile.content === "CV içeriği okunamadı") {
+          updatedQueue[i] = {
+            ...job,
+            status: "Hata: CV içeriği okunamadı. Lütfen CV'yi yeniden yükleyin."
+          };
+          continue;
+        }
+
         // Önce durumu güncelle
         updatedQueue[i] = {
           ...job,
@@ -47,7 +56,7 @@ async function processQueue() {
 
         // Sonra analizi yap
         const analysis = await analyzeCVWithJobDescription(
-          cvFile.content || "CV içeriği okunamadı",
+          cvFile.content,
           job.text,
           openaiApiKey
         );
