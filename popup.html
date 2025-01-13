@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     body {
       width: 600px;
@@ -46,6 +47,12 @@
     }
     .button-blue:hover {
       background-color: #0b7dda;
+    }
+    .button-yellow {
+      background-color: #FFC107;
+    }
+    .button-yellow:hover {
+      background-color: #FFA000;
     }
     .queue-container {
       margin-top: 20px;
@@ -111,21 +118,105 @@
     .save-options button {
       margin-right: 10px;
     }
+    /* Tab styles */
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 1.1em;
+      color: #666;
+    }
+    
+    .tab.active {
+      color: #2196F3;
+      border-bottom: 2px solid #2196F3;
+      margin-bottom: -2px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Notification styles */
+    .notification-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .notification {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      animation: slideIn 0.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="notification-container" id="notificationContainer"></div>
   <div class="container">
     <h3>CV Karşılaştırma Aracı</h3>
-    <input type="file" id="cvFile" accept=".txt,.pdf">
-    <button class="button" id="selectFile">CV Dosyası Seç</button>
-    <div id="fileInfo" class="file-info">
-      <strong>Seçili Dosya:</strong>
-      <p id="fileName"></p>
-    </div>
     
-    <div class="queue-container" id="queueContainer">
-      <h3>İnceleme Kuyruğu</h3>
-      <div id="queueItems"></div>
+    <div class="tabs">
+      <button class="tab active" data-tab="queue">İnceleme Kuyruğu</button>
+      <button class="tab" data-tab="favorites">Favoriler</button>
+    </div>
+
+    <div class="tab-content active" id="queueTab">
+      <input type="file" id="cvFile" accept=".txt,.pdf">
+      <button class="button" id="selectFile">CV Dosyası Seç</button>
+      <div id="fileInfo" class="file-info">
+        <strong>Seçili Dosya:</strong>
+        <p id="fileName"></p>
+      </div>
+      
+      <div class="queue-container" id="queueContainer">
+        <h3>İnceleme Kuyruğu</h3>
+        <div id="queueItems"></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="favoritesTab">
+      <div class="queue-container">
+        <h3>Favori İlanlar</h3>
+        <div id="favoriteItems"></div>
+      </div>
     </div>
   </div>
   <script src="popup.js"></script>
