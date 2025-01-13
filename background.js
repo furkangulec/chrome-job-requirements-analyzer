@@ -10,11 +10,11 @@ async function analyzeCVWithJobDescription(cvText, jobDescription, apiKey) {
       messages: [
         {
           role: "system",
-          content: "Sen bir İK uzmanısın. CV ile iş ilanı arasındaki uyumu analiz edeceksin."
+          content: "Sen bir İK uzmanısın. CV ile iş ilanı arasındaki uyumu analiz edeceksin. Eğer gönderilen iş ilanı yazısı bir iş ilanı değilse veya gönderilen cv bir cv değilse bunu belirt."
         },
         {
           role: "user",
-          content: `CV içeriği: ${cvText}\n\nİş ilanı: ${jobDescription}\n\nBu CV'nin iş ilanı ile uyumunu analiz et. Eksik yetkinlikleri ve güçlü yanları listele. Daha sonra uyumluluk oranının % olarak ver.`
+          content: `CV içeriği: ${cvText}\n\n İş ilanı: ${jobDescription}\n\nBu CV'nin iş ilanı ile uyumunu analiz et. Eksik yetkinlikleri ve güçlü yanları listele. Daha sonra uyumluluk oranının % olarak ver. Eğer sana gönderilen iş ilanı yazısı bir iş ilanı değilse veya gönderilen cv bir cv değilse bunu belirt. `
         }
       ]
     })
