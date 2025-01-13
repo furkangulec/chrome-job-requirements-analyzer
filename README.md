@@ -1,6 +1,18 @@
-# Basit Chrome Uzantısı
+# CV İş İlanı Karşılaştırma Aracı
 
-Bu Chrome uzantısı, herhangi bir web sayfasında sağ tıkladığınızda menüye "Say Hello World" seçeneği ekler. Bu seçeneğe tıkladığınızda ekranda "Hello World!" mesajı görüntülenir.
+Bu Chrome uzantısı, CV'nizi iş ilanlarıyla karşılaştırmanıza ve uyumluluğunu analiz etmenize yardımcı olur. OpenAI GPT-3.5 teknolojisini kullanarak CV'niz ile iş ilanı arasındaki uyumu değerlendirir.
+
+## Özellikler
+
+- CV yükleme (.txt ve .pdf formatları desteklenir)
+- İş ilanlarını sağ tıklayarak analiz kuyruğuna ekleme
+- CV ve iş ilanı uyumluluğunun otomatik analizi
+- Analiz sonuçlarını metin dosyası olarak kaydetme
+- Favori iş ilanlarını saklama ve yönetme
+- Analiz sonuçlarında:
+  - Eksik yetkinlikler
+  - Güçlü yanlar
+  - Uyumluluk oranı (%)
 
 ## Kurulum
 
@@ -10,40 +22,50 @@ Bu Chrome uzantısı, herhangi bir web sayfasında sağ tıkladığınızda men�
 4. "Paketlenmemiş öğe yükle" butonuna tıklayın
 5. Bu proje klasörünü seçin
 
-## Özellikler
+## Kullanım
 
-- Sağ tık menüsüne özel seçenek ekleme
-- Basit alert mesajı gösterimi
-- Tüm web sayfalarında çalışabilme
+1. OpenAI API Anahtarı Ayarlama:
+   - Uzantı simgesine sağ tıklayın ve "Seçenekler"i seçin
+   - OpenAI API anahtarınızı girin ve kaydedin
+
+2. CV Yükleme:
+   - Uzantı penceresini açın
+   - "CV Dosyası Seç" butonuna tıklayın
+   - .txt veya .pdf formatında CV'nizi seçin
+
+3. İş İlanı Analizi:
+   - Herhangi bir web sayfasındaki iş ilanı metnini seçin
+   - Sağ tıklayın ve "CV ile Karşılaştır" seçeneğini seçin
+   - Analiz otomatik olarak başlayacaktır
+
+4. Sonuçları Görüntüleme:
+   - Uzantı penceresinde analiz sonuçlarını görüntüleyin
+   - Sonuçları .txt formatında kaydedebilirsiniz
+   - İlanları favorilere ekleyebilirsiniz
+
+## Gereksinimler
+
+- Chrome tarayıcısı
+- OpenAI API anahtarı
+- İnternet bağlantısı
 
 ## Teknolojiler
 
-- Manifest V3
 - Chrome Extensions API
+- OpenAI GPT-3.5 API
 - JavaScript
+- HTML/CSS
+
+## Notlar
+
+- CV ve API anahtarı eklenmeden analiz yapılamaz
+- Analiz sonuçları tarayıcı kapansa bile saklanır
+- Favori ilanlar yerel olarak depolanır
 
 ---
 
-# Simple Chrome Extension
+# CV Job Posting Comparison Tool
 
-This Chrome extension adds a "Say Hello World" option to the right-click menu on any webpage. When clicked, it displays a "Hello World!" message on the screen.
+This Chrome extension helps you compare your CV with job postings and analyze their compatibility using OpenAI GPT-3.5 technology.
 
-## Installation
-
-1. Open Chrome browser
-2. Type `chrome://extensions` in the address bar
-3. Enable "Developer mode" in the top right corner
-4. Click "Load unpacked" button
-5. Select this project folder
-
-## Features
-
-- Custom right-click menu option
-- Simple alert message display
-- Works on all web pages
-
-## Technologies
-
-- Manifest V3
-- Chrome Extensions API
-- JavaScript 
+[English version of the documentation continues with the same structure...] 

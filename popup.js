@@ -6,6 +6,48 @@ document.addEventListener('DOMContentLoaded', function() {
   const queueItems = document.getElementById('queueItems');
   const favoriteItems = document.getElementById('favoriteItems');
   const notificationContainer = document.getElementById('notificationContainer');
+  const warningMessage = document.getElementById('warningMessage');
+
+  // Uyarı mesajını göster
+  function showWarning(message) {
+    warningMessage.textContent = message;
+    warningMessage.classList.add('show');
+  }
+
+  // Uyarı mesajını gizle
+  function hideWarning() {
+    warningMessage.textContent = '';
+    warningMessage.classList.remove('show');
+  }
+
+  // Durum kontrolü
+  function checkStatus() {
+    chrome.storage.local.get(['cvFile', 'openaiApiKey'], function(result) {
+      hideWarning();
+      
+      let warnings = [];
+      if (!result.openaiApiKey) {
+        warnings.push('API anahtarı girilmeli');
+      }
+      if (!result.cvFile) {
+        warnings.push('CV dosyası eklenmeli');
+      } else if (!result.cvFile.content || result.cvFile.content === "CV içeriği okunamadı") {
+        warnings.push('CV dosyası yeniden yüklenmeli');
+      }
+
+      if (warnings.length > 0) {
+        showWarning(warnings.join(' • '));
+      }
+    });
+  }
+
+  // Sayfa yüklendiğinde ve storage değiştiğinde durumu kontrol et
+  checkStatus();
+  chrome.storage.onChanged.addListener(function(changes, namespace) {
+    if (namespace === 'local' && (changes.cvFile || changes.openaiApiKey)) {
+      checkStatus();
+    }
+  });
 
   // Bildirim göster
   function showNotification(message, duration = 3000) {

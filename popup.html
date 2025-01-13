@@ -186,6 +186,21 @@
         opacity: 0;
       }
     }
+
+    /* Warning message styles */
+    .warning-message {
+      color: #856404;
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      padding: 10px 15px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .warning-message.show {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -199,6 +214,7 @@
     </div>
 
     <div class="tab-content active" id="queueTab">
+      <div id="warningMessage" class="warning-message"></div>
       <input type="file" id="cvFile" accept=".txt,.pdf">
       <button class="button" id="selectFile">CV Dosyası Seç</button>
       <div id="fileInfo" class="file-info">
